@@ -8,6 +8,7 @@ typedef struct {
     const char* json;
 }lept_context;
 
+
 static void lept_parse_whitespace(lept_context* c) {
     const char *p = c->json;
     while (*p == ' ' || *p == '\t' || *p == '\n' || *p == '\r')
@@ -17,7 +18,7 @@ static void lept_parse_whitespace(lept_context* c) {
 
 static int lept_parse_literal(lept_context* c, lept_value* v, const char* literal, int type) {
     EXPECT(c, literal[0]);
-    int i;
+    size_t i;
     for (i = 0; literal[i+1] != '\0'; i++) {
         if (c->json[i] != literal[i+1])
             return LEPT_PARSE_INVALID_VALUE;
@@ -55,4 +56,9 @@ int lept_parse(lept_value* v, const char* json) {
 lept_type lept_get_type(const lept_value* v) {
     assert(v != NULL);
     return v->type;
+}
+
+double lept_get_number(const lept_value* v) {
+    assert(v != NULL && v->type == LEPT_NUMBER);
+    return v->n;
 }
